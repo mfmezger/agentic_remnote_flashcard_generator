@@ -1,0 +1,105 @@
+# .pre-commit-config.yaml
+repos:
+  # Python linting and formatting tools
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.2
+    hooks:
+      - id: ruff-check
+        args:
+          - --fix
+      - id: ruff-format
+  # Basic file system and content validation hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+        exclude: ^.*\.j2$
+      - id: check-yaml
+      - id: check-added-large-files
+        args:
+          - --maxkb=5000
+      - id: check-ast
+      - id: check-docstring-first
+      - id: detect-private-key
+  # Format Python code blocks in documentation
+  - repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.20.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black==22.12.0
+  # Upgrade Python syntax to newer versions
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.20.0
+    hooks:
+      - id: pyupgrade
+        args:
+          - --py310-plus
+  # Lint shell scripts for common issues
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        name: shellcheck
+        args:
+          - --severity=warning
+  # Validate GitHub Actions workflow files
+  - repo: https://github.com/sirosen/check-jsonschema
+    rev: 0.34.0
+    hooks:
+      - id: check-github-workflows
+        args:
+          - --verbose
+  # Check for broken links in markdown files
+  - repo: https://github.com/tcort/markdown-link-check
+    rev: v3.13.7
+    hooks:
+      - id: markdown-link-check
+        args:
+          - -q
+  # Static type checking for Python
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.18.2
+    hooks:
+      - id: mypy
+  # Remove unnecessary # noqa comments
+  - repo: https://github.com/asottile/yesqa
+    rev: v1.5.0
+    hooks:
+      - id: yesqa
+  # Check for common English typos in text
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+  # Detect hardcoded secrets and sensitive information
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.28.0
+    hooks:
+      - id: gitleaks
+  # Validate Makefiles
+  - repo: https://github.com/checkmake/checkmake.git
+    rev: 0.2.2
+    hooks:
+      - id: checkmake
+  # Lint YAML files for style and syntax issues
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+  # Detect typos in text files
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.36.3
+    hooks:
+      - id: typos
+  # Format YAML files consistently
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.17.2
+    hooks:
+      - id: yamlfmt
+# - repo: https://github.com/commitizen-tools/commitizen
+#   rev: v1.17.0
+#   hooks:
+#     - id: commitizen
+#       stages: [commit-msg]

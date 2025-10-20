@@ -1,0 +1,28 @@
+[project]
+name = "flashcard-generator"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Marc Fabian Mezger", email = "57255687+mfmezger@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic-ai-slim[google]>=1.1.0",
+    "python-dotenv>=1.1.1",
+]
+
+[project.scripts]
+flashcard-generator = "flashcard_generator:main"
+
+[build-system]
+requires = ["uv_build>=0.9.3,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "pep440"
+version_provider = "uv"
+update_changelog_on_bump = true
+major_version_zero = true
