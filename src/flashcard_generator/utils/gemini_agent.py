@@ -9,6 +9,8 @@ from pydantic_ai.models.google import GoogleModel, GoogleModelSettings
 from pydantic_ai.providers.google import GoogleProvider
 from dotenv import load_dotenv
 
+from flashcard_generator.model import FlashcardSet
+
 load_dotenv(override=True)
 
 
@@ -19,7 +21,7 @@ def initialize_agent(
     model_name: str = "gemini-2.5-flash",
     tools: list = [],
     retries: int = 5,
-) -> Agent[str, str]:
+) -> Agent[str, FlashcardSet]:
     """Initialize a Pydantic AI agent with Google model.
 
     Args:
@@ -71,7 +73,7 @@ def initialize_agent(
 
     return Agent(
         model=model,
-        output_type=str,
+        output_type=FlashcardSet,
         instrument=True,
         model_settings=model_settings,
         retries=retries,
