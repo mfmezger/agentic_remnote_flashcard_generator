@@ -12,7 +12,7 @@ def main() -> None:
 
     # iterate over the data folder
     files = sorted(Path("data").glob(pattern="*.pdf"))
-    results: list[str] = []
+    results: list[str] = ["# Flashcards\n"]
 
     for file in files:
         print(f"Processing file: {file.name}")
@@ -26,6 +26,9 @@ def main() -> None:
                 BinaryContent(data=file_content, media_type="application/pdf"),
             ]
         )  # pyright: ignore[reportArgumentType]
+
+        # adding the name of the file as a header
+        results.append(f"## Flashcards for {file.name}\n")
 
         for r in result.output.flashcards:
             results.append("- " + r.question + " == " + r.answer)
