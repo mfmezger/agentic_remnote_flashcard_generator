@@ -15,14 +15,51 @@ dependencies = [
 [project.scripts]
 flashcard-generator = "flashcard_generator:main"
 
+[tool.commitizen]
+# This is the most important line. It tells cz to use your custom rules.
+name = "cz_customize"
+
+# This maps your commit types to version bumps
+bump_map = { "feat" = "MINOR", "fix" = "PATCH", "chore" = "MINOR" }
+
+# This tells cz which file to write the new version to
+version_files = [
+    "pyproject.toml:version"
+]
+
+# --- This section defines the questions `git cz` will ask you ---
+[tool.commitizen.customize]
+message_template = "{type}{scope}: {subject}"
+example = "feat(api): add new user endpoint"
+schema = """
+<type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+"""
+
+# Note the syntax for a list of tables in TOML
+questions = [
+    { type = "list", name = "type", message = "Select the type of change you're committing:", choices = [
+        { value = "feat", name = "feat:     A new feature (triggers MINOR)" },
+        { value = "fix", name = "fix:      A bug fix (triggers PATCH)" },
+        { value = "chore", name = "chore:    Maintenance, etc. (triggers MINOR)" },
+        { value = "docs", name = "docs:     Documentation only changes" },
+        { value = "style", name = "style:    Changes that do not affect the meaning of the code" },
+        { value = "refactor", name = "refactor: A code change that neither fixes a bug nor adds a feature" },
+        { value = "perf", name = "perf:     A code change that improves performance" },
+        { value = "test", name = "test:     Adding missing tests or correcting existing tests" },
+        { value = "build", name = "build:    Changes that affect the build system or external dependencies" },
+        { value = "ci", name = "ci:       Changes to our CI configuration files and scripts" }
+    ]},
+    { type = "input", name = "scope", message = "What is the scope of this change (e.g., component or file name)? (press enter to skip)\n" },
+    { type = "input", name = "subject", message = "Write a short, imperative tense description of the change:\n" },
+    { type = "input", name = "body", message = "Provide a longer description of the change: (press enter to skip)\n" },
+    { type = "confirm", name = "is_breaking_change", message = "Are there any breaking changes?", default = false },
+    { type = "input", name = "footer", message = "List any breaking changes or issues closed by this change: (press enter to skip)\n" }
+]
+
 [build-system]
 requires = ["uv_build>=0.9.3,<0.10.0"]
 build-backend = "uv_build"
-
-[tool.commitizen]
-name = "cz_conventional_commits"
-tag_format = "$version"
-version_scheme = "pep440"
-version_provider = "uv"
-update_changelog_on_bump = true
-major_version_zero = true
