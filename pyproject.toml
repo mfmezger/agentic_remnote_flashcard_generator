@@ -29,7 +29,7 @@ version_files = [
 
 # --- This section defines the questions `git cz` will ask you ---
 [tool.commitizen.customize]
-message_template = "{type}{scope}: {subject}"
+message_template = "{{type}}{% if scope %}({{scope}}){% endif %}: {{subject}}\n\n{{body}}\n\n{{footer}}"
 example = "feat(api): add new user endpoint"
 schema = """
 <type>(<scope>): <subject>
