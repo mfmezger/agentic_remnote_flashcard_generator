@@ -1,6 +1,6 @@
 [project]
 name = "flashcard-generator"
-version = "0.4.0"
+version = "0.5.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
@@ -18,7 +18,11 @@ flashcard-generator = "flashcard_generator:main"
 [tool.commitizen]
 # This is the most important line. It tells cz to use your custom rules.
 name = "cz_customize"
+version_provider = "pep621"
+search_parent_directories = true
 
+# --- This section defines the questions `git cz` will ask you ---
+[tool.commitizen.customize]
 # This maps your commit types to version bumps
 bump_map = { "feat" = "MINOR", "fix" = "PATCH", "chore" = "MINOR" }
 
@@ -26,9 +30,6 @@ bump_map = { "feat" = "MINOR", "fix" = "PATCH", "chore" = "MINOR" }
 version_files = [
     "pyproject.toml:version"
 ]
-
-# --- This section defines the questions `git cz` will ask you ---
-[tool.commitizen.customize]
 message_template = "{{type}}{% if scope %}({{scope}}){% endif %}: {{subject}}\n\n{{body}}\n\n{{footer}}"
 example = "feat(api): add new user endpoint"
 schema = """
