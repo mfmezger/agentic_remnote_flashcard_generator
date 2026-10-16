@@ -1,7 +1,7 @@
 [project]
 name = "flashcard-generator"
 version = "0.5.0"
-description = "Add your description here"
+description = "Generate RemNote flashcards from PDFs with Gemini"
 readme = "README.md"
 authors = [
     { name = "Marc Fabian Mezger", email = "57255687+mfmezger@users.noreply.github.com" }
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-flashcard-generator = "flashcard_generator:main"
+flashcard-generator = "flashcard_generator.main:main"
 
 [tool.commitizen]
 # This is the most important line. It tells cz to use your custom rules.

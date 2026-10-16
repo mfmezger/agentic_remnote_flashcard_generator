@@ -1,41 +1,52 @@
+"""Generate RemNote flashcards for every PDF in a folder."""
+
+import argparse
+from pathlib import Path
+
+from dotenv import load_dotenv
 from pydantic_ai import BinaryContent
 
-from flashcard_generator.prompts import SYSTEM_PROMPT
-from flashcard_generator.utils.gemini_agent import initialize_agent
-from pathlib import Path
+from flashcard_generator.agent import initialize_agent
 
 
 def main() -> None:
-    # generate results folder
-    agent = initialize_agent(prompt=SYSTEM_PROMPT)
-    Path("results").mkdir(exist_ok=True)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--data", type=Path, default=Path("data"), help="folder with PDFs"
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("results/flashcards.md"),
+        help="markdown output file",
+    )
+    args = parser.parse_args()
 
-    # iterate over the data folder
-    files = sorted(Path("data").glob(pattern="*.pdf"))
-    results: list[str] = ["# Flashcards\n"]
+    files = sorted(args.data.glob("*.pdf"))
+    if not files:
+        raise SystemExit(f"No PDFs found in {args.data}/")
+
+    load_dotenv(override=True)
+    agent = initialize_agent()
+    lines = ["# Flashcards", ""]
 
     for file in files:
         print(f"Processing file: {file.name}")
-
-        with open(file=file, mode="rb") as f:
-            file_content = f.read()
-
         result = agent.run_sync(
             [
                 "Please generate flashcards for the following document:",
-                BinaryContent(data=file_content, media_type="application/pdf"),
+                BinaryContent(data=file.read_bytes(), media_type="application/pdf"),
             ]
-        )  # pyright: ignore[reportArgumentType]
+        )
+        lines += [f"## Flashcards for {file.name}", ""]
+        lines += [
+            f"- {card.question} == {card.answer}" for card in result.output.flashcards
+        ]
+        lines.append("")
 
-        # adding the name of the file as a header
-        results.append(f"## Flashcards for {file.name}\n")
-
-        for r in result.output.flashcards:
-            results.append("- " + r.question + " == " + r.answer)
-
-    # save the outputs as one markdown file.
-    with open(file="results/flashcards.md", mode="w") as f:
-        f.write("\n".join(results))
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text("\n".join(lines))
+    print(f"Wrote {args.output}")
 
 
 if __name__ == "__main__":
