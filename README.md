@@ -14,4 +14,5 @@ uv run flashcard-generator --data other/ --output results/other.md
 
 Paste the resulting Markdown into RemNote; each file gets its own `##` heading.
 
-`data/`, `results/` and `.env` are gitignored.
+`data/`, `results/` and `.env` are gitignored. Finished decks worth keeping live in
+`flashcards/` (e.g. `flashcards/metrics.md`).
